@@ -9,18 +9,13 @@ namespace
 
 	std::vector<LONG(*)(EXCEPTION_POINTERS*)> handlers{};
 
-	void __declspec(noinline) iretq()
-	{
-		
-	}
-
 	void exception_handler(EXCEPTION_RECORD* exception_record, CONTEXT* context_record)
 	{
 		EXCEPTION_POINTERS exception_info{ exception_record, context_record };
 
 		for (auto handler : handlers)
 			if (handler(&exception_info) == EXCEPTION_CONTINUE_EXECUTION)
-				iretq();
+				ZwContinue(context_record, false);
 
 		if (Wow64PrepareForExecution)
 			(Wow64PrepareForExecution)(exception_record, context_record);
@@ -45,11 +40,6 @@ namespace
 		VirtualProtect(function_ptr, sizeof(void*), PAGE_EXECUTE_READWRITE, &old_protect);
 		*function_ptr = &exception_handler;
 		VirtualProtect(function_ptr, sizeof(void*), old_protect, &old_protect);
-
-		char iretq_shellcode[] = "\x58\x48\xCF";
-		VirtualProtect(iretq, sizeof(iretq_shellcode) - 1, PAGE_EXECUTE_READWRITE, &old_protect);
-		std::memcpy(iretq, iretq_shellcode, sizeof(iretq_shellcode) - 1);
-		VirtualProtect(iretq, sizeof(iretq_shellcode) - 1, old_protect, &old_protect);
 
 		init_complete = true;
 		return true;
