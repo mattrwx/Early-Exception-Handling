@@ -46,7 +46,7 @@ namespace
 	}
 }
 
-void AddEarlyExceptionHandler(ULONG First, LONG(*Handler)(EXCEPTION_POINTERS*))
+void* AddEarlyExceptionHandler(ULONG First, LONG(*Handler)(EXCEPTION_POINTERS*))
 {
 	if (!init_complete)
 		if (!init())
