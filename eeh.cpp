@@ -56,6 +56,8 @@ void AddEarlyExceptionHandler(ULONG First, LONG(*Handler)(EXCEPTION_POINTERS*))
 		handlers.insert(handlers.begin(), Handler);
 	else
 		handlers.push_back(Handler);
+
+	return (void*)Handler;
 }
 
 LONG RemoveEarlyExceptionHandler(LONG(*Handler)(EXCEPTION_POINTERS*))
