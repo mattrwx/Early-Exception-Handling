@@ -50,7 +50,7 @@ void* AddEarlyExceptionHandler(ULONG First, LONG(*Handler)(EXCEPTION_POINTERS*))
 {
 	if (!init_complete)
 		if (!init())
-			return;
+			return nullptr;
 
 	if (First)
 		handlers.insert(handlers.begin(), Handler);
