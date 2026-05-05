@@ -38,7 +38,7 @@ namespace
 
 		DWORD old_protect{};
 		VirtualProtect(function_ptr, sizeof(void*), PAGE_EXECUTE_READWRITE, &old_protect);
-		*function_ptr = &exception_handler;
+		*function_ptr = (void*)&exception_handler;
 		VirtualProtect(function_ptr, sizeof(void*), old_protect, &old_protect);
 
 		init_complete = true;
